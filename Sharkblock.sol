@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.7.0 <0.9.0;
+pragma solidity ^0.8.4;
 
 contract Sharkblock {
     struct Shark {
@@ -57,6 +57,8 @@ contract Sharkblock {
         string memory _title,
         string memory _description,
         uint256 _goal,
+        uint256 _startDate,
+        uint256 _endDate,
         string[] memory _images
     ) {
         status = Status.ACTIVE;
@@ -66,8 +68,8 @@ contract Sharkblock {
             _title,
             _description,
             _goal,
-            block.timestamp,
-            block.timestamp + 10 days
+            _startDate,
+            _endDate
         );
         campaign = newCamp;
     }
@@ -125,6 +127,8 @@ contract Sharkblock {
         string memory _title,
         string memory _description,
         uint256 _goal,
+        uint256 _startDate,
+        uint256 _endDate,
         string[] memory _images
     ) public {
         status = Status.ACTIVE;
@@ -134,8 +138,8 @@ contract Sharkblock {
             _title,
             _description,
             _goal,
-            block.timestamp,
-            block.timestamp + 10 days
+            _startDate,
+            _endDate
         );
         campaign = newCamp;
     }

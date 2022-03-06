@@ -26,7 +26,7 @@ contract Sharkblock {
     Shark[] public sharks;
     Campaign public campaign;
     string[] public images;
-    mapping(address => Shark) balances;
+    mapping(address => Shark) public balances;
 
     event Investment(address addr, uint256 amount);
     event Transfer(address addr, uint256 amount);
@@ -43,7 +43,7 @@ contract Sharkblock {
     }
 
     modifier isMature() {
-        require(campaign.endDate < block.timestamp, "Campaign is Ended!");
+        require(campaign.endDate > block.timestamp, "Campaign is Ended!");
         _;
     }
 
@@ -74,8 +74,8 @@ contract Sharkblock {
         campaign = newCamp;
     }
 
-    function isMaturedFunction() internal view returns (bool) {
-        if (campaign.endDate < block.timestamp) return true;
+    function isMaturedFunction() public view returns (bool) {
+        if (campaign.endDate > block.timestamp) return true;
         return false;
     }
 

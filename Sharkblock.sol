@@ -21,8 +21,8 @@ contract Sharkblock {
         ACTIVE,
         CLOSED
     }
-    Status status = Status.PENDING;
-    address public owner = msg.sender;
+    Status public status = Status.PENDING;
+    address public owner ;
     Shark[] public sharks;
     Campaign public campaign;
     string[] public images;
@@ -36,9 +36,7 @@ contract Sharkblock {
         _;
     }
     modifier isGoalreach() {
-        uint256 _total = msg.value + address(this).balance;
-        require(address(this).balance < campaign.goal, "Goal already reached");
-        require(_total <= campaign.goal, "Amount exceeding goals");
+        require(campaign.goal > address(this).balance, "Goal Reached");
         _;
     }
 
@@ -59,10 +57,12 @@ contract Sharkblock {
         uint256 _goal,
         uint256 _startDate,
         uint256 _endDate,
-        string[] memory _images
+        string[] memory _images,
+        address _owner
     ) {
         status = Status.ACTIVE;
         images = _images;
+        owner = _owner;
         Campaign memory newCamp = Campaign(
             _category,
             _title,
@@ -83,7 +83,7 @@ contract Sharkblock {
         status = Status.CLOSED;
     }
 
-    function investNow() public payable isClosed isMature {
+    function investNow() public payable isClosed isMature isGoalreach {
         Shark memory newShark = Shark(block.timestamp, msg.value, msg.sender);
         sharks.push(newShark);
         balances[msg.sender] = newShark;
@@ -117,7 +117,6 @@ contract Sharkblock {
     function tranferFromCampaign() public onlyOwner {
         address payable addr = payable(owner);
         uint256 amount = address(this).balance;
-
         addr.transfer(amount);
         emit Transfer(addr, amount);
     }
@@ -129,10 +128,12 @@ contract Sharkblock {
         uint256 _goal,
         uint256 _startDate,
         uint256 _endDate,
-        string[] memory _images
-    ) public {
+        string[] memory _images,
+        address _owner
+    ) public isClosed {
         status = Status.ACTIVE;
         images = _images;
+        owner = _owner;
         Campaign memory newCamp = Campaign(
             _category,
             _title,

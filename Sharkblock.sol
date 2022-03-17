@@ -17,11 +17,10 @@ contract Sharkblock {
         uint256 endDate;
     }
     enum Status {
-        PENDING,
         ACTIVE,
         CLOSED
     }
-    Status public status = Status.PENDING;
+    Status public status = Status.ACTIVE;
     address public owner ;
     Shark[] public sharks;
     Campaign public campaign;
@@ -60,7 +59,6 @@ contract Sharkblock {
         string[] memory _images,
         address _owner
     ) {
-        status = Status.ACTIVE;
         images = _images;
         owner = _owner;
         Campaign memory newCamp = Campaign(
@@ -131,7 +129,6 @@ contract Sharkblock {
         string[] memory _images,
         address _owner
     ) public isClosed {
-        status = Status.ACTIVE;
         images = _images;
         owner = _owner;
         Campaign memory newCamp = Campaign(
